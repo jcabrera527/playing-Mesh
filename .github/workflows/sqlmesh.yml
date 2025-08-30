@@ -1,43 +1,62 @@
 name: SQLMesh Bot
 run-name: 🚀SQLMesh Bot 🚀
+
 on:
   pull_request:
     types:
-    - synchronize
-    - opened
-  # Required if using required approvers to automate deployments
+      - opened
+      - reopened
+      - synchronize
   pull_request_review:
     types:
-    - edited
-    - submitted
-    - dismissed
-# The latest commit is the one that will be used to create the PR environment and deploy to production
+      - submitted
+      - dismissed
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
+
 jobs:
-  sqlmesh:
-    name: SQLMesh Actions Workflow
+  sqlmesh-bot: # Changed 'sqlmesh' to 'sqlmesh-bot' to be more descriptive
+    name: SQLMesh CI/CD Bot
     runs-on: ubuntu-latest
     permissions:
-      # Required to access code in PR
       contents: write
-      # Required to post comments
       issues: write
-      # Required to update check runs
       checks: write
-      # Required to merge
       pull-requests: write
     steps:
       - name: Setup Python
         uses: actions/setup-python@v4
-      - name: Checkout PR branch
-        uses: actions/checkout@v4
         with:
-          ref: refs/pull/${{ github.event.issue.pull_request && github.event.issue.number || github.event.pull_request.number  }}/merge
-      - name: Install SQLMesh + Dependencies
+          python-version: '3.9'
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        # The complex 'ref' is not needed; the action defaults to the correct PR code.
+
+      - name: Install Dependencies
         run: pip install -r requirements.txt
         shell: bash
-      - name: Run CI/CD Bot
+
+       # --- START OF NEW DEBUGGING STEP ---
+      - name: Verify Environment Variables are being set
         run: |
-          sqlmesh_cicd -p ${{ github.workspace }} github --token ${{ secrets.GITHUB_TOKEN }} run-all
+          echo "Checking variables...."
+          if [ -z "$DATABRICKS_HOSTNAME" ]; then echo "ERROR: DATABRICKS_HOSTNAME is not set."; else echo "DATABRICKS_HOSTNAME is set."; fi
+          if [ -z "$DATABRICKS_HTTPATH" ]; then echo "ERROR: DATABRICKS_HTTPATH is not set."; else echo "DATABRICKS_HTTPATH is set."; fi
+          if [ -z "$DATABRICKS_TOKEN" ]; then echo "ERROR: DATABRICKS_TOKEN is not set."; else echo "DATABRICKS_TOKEN is set."; fi
+        env:
+          DATABRICKS__CONNECTION__TYPE: "databricks"
+          DATABRICKS_HOSTNAME: ${{ secrets.DATABRICKS_HOSTNAME }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+          DATABRICKS_HTTPATH: ${{ secrets.DATABRICKS_HTTPATH }}
+      # --- END OF NEW DEBUGGING STEP ---
+
+      - name: Run CI/CD Bot
+        run: sqlmesh_cicd -p ${{ github.workspace }} github --token ${{ secrets.GITHUB_TOKEN  }} run-all
+        env:
+          # THIS IS THE FIX: Pass secrets as environment variables to the command
+          DATABRICKS_HOSTNAME: ${{ secrets.DATABRICKS_HOSTNAME }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+          DATABRICKS_HTTPATH: ${{ secrets.DATABRICKS_HTTPATH }}
