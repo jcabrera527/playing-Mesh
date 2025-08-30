@@ -42,7 +42,7 @@ jobs:
        # --- START OF NEW DEBUGGING STEP ---
       - name: Verify Environment Variables are being set
         run: |
-          echo "Checking variables..."
+          echo "Checking variables...."
           if [ -z "$DATABRICKS_HOSTNAME" ]; then echo "ERROR: DATABRICKS_HOSTNAME is not set."; else echo "DATABRICKS_HOSTNAME is set."; fi
           if [ -z "$DATABRICKS_HTTPATH" ]; then echo "ERROR: DATABRICKS_HTTPATH is not set."; else echo "DATABRICKS_HTTPATH is set."; fi
           if [ -z "$DATABRICKS_TOKEN" ]; then echo "ERROR: DATABRICKS_TOKEN is not set."; else echo "DATABRICKS_TOKEN is set."; fi
