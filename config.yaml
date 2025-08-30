@@ -26,10 +26,9 @@ linter:
 # This section defines the bot's behavior.
 cicd_bot:
   type: github
-  # Setting this to false (or omitting it) enables the "approve-to-deploy" workflow.
-  # This is the key setting from the video.
-  enable_deploy_command: false
-  # You can customize the merge method if you like.
   merge_method: squash
-  # Ensure this matches your production branch name in GitHub.
-  prod_branch_name: main
+  users:
+  - username: arebac_the_approver
+    github_username: arebac  # The GitHub handle of your dummy/approver account
+    roles:
+      - required_approver

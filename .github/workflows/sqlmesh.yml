@@ -4,21 +4,19 @@ run-name: 🚀SQLMesh Bot 🚀
 on:
   pull_request:
     types:
-      - opened
-      - reopened
       - synchronize
-  # This trigger is CRITICAL for the "approve-to-deploy" workflow
+      - opened
   pull_request_review:
     types:
+      - edited
       - submitted
+      - dismissed
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
-
 jobs:
-  sqlmesh-bot:
-    name: SQLMesh Actions Workflow
+  sqlmesh:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -26,21 +24,15 @@ jobs:
       checks: write
       pull-requests: write
     steps:
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - uses: actions/setup-python@​v4
+      - uses: actions/checkout@​v4
         with:
-          python-version: '3.9'
-
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Install Dependencies
+          ref: refs/pull/${{ github.event.issue.pull_request && github.event.issue.number || github.event.pull_request.number }}/merge
+      - name: Install SQLMesh + deps
         run: pip install -r requirements.txt
-        shell: bash
-
-      # This single step runs the "smart" bot that handles all the logic
       - name: Run CI/CD Bot
-        run: sqlmesh_cicd -p ${{ github.workspace }} github --token ${{ secrets.GITHUB_TOKEN }} run-all
+        run: |
+          sqlmesh_cicd -p ${{ github.workspace }} github --token ${{ secrets.GITHUB_TOKEN }} run-all
         env:
           # These provide the secrets that your config.yaml is expecting
           DATABRICKS_HOSTNAME: ${{ secrets.DATABRICKS_HOSTNAME }}
