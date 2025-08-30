@@ -17,7 +17,7 @@ gateways:
       # auth_type: 
       # oauth_client_id: 
       # oauth_client_secret: 
-      catalog: 
+      # catalog: 
       # http_headers: 
       # session_configuration: 
       # databricks_connect_server_hostname: 
