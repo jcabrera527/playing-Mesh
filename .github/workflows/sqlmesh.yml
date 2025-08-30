@@ -24,9 +24,10 @@ jobs:
       checks: write
       pull-requests: write
     steps:
-      - uses: actions/setup-python@​v4
-      - uses: actions/checkout@​v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
+          python-version: "3.9"
           ref: refs/pull/${{ github.event.issue.pull_request && github.event.issue.number || github.event.pull_request.number }}/merge
       - name: Install SQLMesh + deps
         run: pip install -r requirements.txt
