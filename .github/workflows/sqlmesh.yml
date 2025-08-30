@@ -4,22 +4,21 @@ run-name: 🚀SQLMesh Bot 🚀
 on:
   pull_request:
     types:
-    - synchronize
-    - opened
-  # Required if using required approvers to automate deployments
+      - opened
+      - reopened
+      - synchronize
+  # This trigger is CRITICAL for the "approve-to-deploy" workflow
   pull_request_review:
     types:
-    - edited
-    - submitted
-    - dismissed
+      - submitted
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
 jobs:
-  sqlmesh-bot: # Changed 'sqlmesh' to 'sqlmesh-bot' to be more descriptive
-    name: SQLMesh CI/CD Bot
+  sqlmesh-bot:
+    name: SQLMesh Actions Workflow
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -34,30 +33,16 @@ jobs:
 
       - name: Checkout Code
         uses: actions/checkout@v4
-        # The complex 'ref' is not needed; the action defaults to the correct PR code.
 
       - name: Install Dependencies
         run: pip install -r requirements.txt
         shell: bash
 
-       # --- START OF NEW DEBUGGING STEP ---
-      - name: Verify Environment Variables are being set
-        run: |
-          echo "Checking variables...."
-          if [ -z "$DATABRICKS_HOSTNAME" ]; then echo "ERROR: DATABRICKS_HOSTNAME is not set."; else echo "DATABRICKS_HOSTNAME is set."; fi
-          if [ -z "$DATABRICKS_HTTPATH" ]; then echo "ERROR: DATABRICKS_HTTPATH is not set."; else echo "DATABRICKS_HTTPATH is set."; fi
-          if [ -z "$DATABRICKS_TOKEN" ]; then echo "ERROR: DATABRICKS_TOKEN is not set."; else echo "DATABRICKS_TOKEN is set."; fi
-        env:
-          DATABRICKS__CONNECTION__TYPE: "databricks"
-          DATABRICKS_HOSTNAME: ${{ secrets.DATABRICKS_HOSTNAME }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
-          DATABRICKS_HTTPATH: ${{ secrets.DATABRICKS_HTTPATH }}
-      # --- END OF NEW DEBUGGING STEP ---
-
+      # This single step runs the "smart" bot that handles all the logic
       - name: Run CI/CD Bot
-        run: sqlmesh_cicd -p ${{ github.workspace }} github --token ${{ secrets.GITHUB_TOKEN  }} run-all
+        run: sqlmesh_cicd -p ${{ github.workspace }} github --token ${{ secrets.GITHUB_TOKEN }} run-all
         env:
-          # THIS IS THE FIX: Pass secrets as environment variables to the command
+          # These provide the secrets that your config.yaml is expecting
           DATABRICKS_HOSTNAME: ${{ secrets.DATABRICKS_HOSTNAME }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
           DATABRICKS_HTTPATH: ${{ secrets.DATABRICKS_HTTPATH }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}

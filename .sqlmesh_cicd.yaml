@@ -1,6 +1,6 @@
+# This file defines WHO can approve a production deployment.
 users:
-  # User 1: This is your user from the example
-  - username: jcabrera527          # An internal, unique identifier. Can be anything.
-    github_username: arebac  # CRITICAL: This MUST be the user's exact GitHub handle.
+  - username: arebac_the_approver
+    github_username: arebac  # The GitHub handle of your dummy/approver account
     roles:
-      - required_approver         # This role gives them the power to trigger a production deploy with their approval.
+      - required_approver

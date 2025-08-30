@@ -2,48 +2,34 @@
 gateways:
   databricks:
     connection:
-      # For more information on configuring the connection to your execution engine, visit:
-      # https://sqlmesh.readthedocs.io/en/stable/reference/configuration/#connection
-      # https://sqlmesh.readthedocs.io/en/stable/integrations/engines/databricks/#connection-options
       type: databricks
-      # concurrent_tasks: 1
-      # register_comments: True
-      # pre_ping: False
-      # pretty_sql: False
-      # schema_differ_overrides: 
       server_hostname: "{{ env_var('DATABRICKS_HOSTNAME') }}"
       http_path: "{{ env_var('DATABRICKS_HTTPATH') }}"
       access_token:  "{{ env_var('DATABRICKS_TOKEN') }}"
-      # auth_type: 
-      # oauth_client_id: 
-      # oauth_client_secret: 
-      # catalog: 
-      # http_headers: 
-      # session_configuration: 
-      # databricks_connect_server_hostname: 
-      # databricks_connect_access_token: 
-      # databricks_connect_cluster_id: 
-      # databricks_connect_use_serverless: False
-      # force_databricks_connect: False
-      # disable_databricks_connect: False
-      # disable_spark_session: False
 
 default_gateway: databricks
 
 # --- Model Defaults ---
-# https://sqlmesh.readthedocs.io/en/stable/reference/model_configuration/#model-defaults
-
 model_defaults:
   dialect: databricks
-  start: 2025-08-29 # Start date for backfill history
-  cron: '@daily'    # Run models daily at 12am UTC (can override per model)
+  start: 2025-08-29
+  cron: '@daily'
 
 # --- Linting Rules ---
-# Enforce standards for your team
-# https://sqlmesh.readthedocs.io/en/stable/guides/linter/
-
 linter:
   enabled: true
   rules:
     - ambiguousorinvalidcolumn
     - invalidselectstarexpansion
+
+# --- CI/CD BOT CONFIGURATION ---
+# This section defines the bot's behavior.
+cicd_bot:
+  type: github
+  # Setting this to false (or omitting it) enables the "approve-to-deploy" workflow.
+  # This is the key setting from the video.
+  enable_deploy_command: false
+  # You can customize the merge method if you like.
+  merge_method: squash
+  # Ensure this matches your production branch name in GitHub.
+  prod_branch_name: main
