@@ -4,13 +4,14 @@ run-name: 🚀SQLMesh Bot 🚀
 on:
   pull_request:
     types:
-      - opened
-      - reopened
-      - synchronize
+    - synchronize
+    - opened
+  # Required if using required approvers to automate deployments
   pull_request_review:
     types:
-      - submitted
-      - dismissed
+    - edited
+    - submitted
+    - dismissed
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
