@@ -1,0 +1,6 @@
+users:
+  # User 1: This is your user from the example
+  - username: jcabrera527          # An internal, unique identifier. Can be anything.
+    github_username: jcabrera527  # CRITICAL: This MUST be the user's exact GitHub handle.
+    roles:
+      - required_approver         # This role gives them the power to trigger a production deploy with their approval.
