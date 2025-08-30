@@ -17,6 +17,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   sqlmesh:
+    name: SQLMesh Actions Workflow
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -29,7 +30,9 @@ jobs:
         with:
           python-version: '3.9'
           ref: refs/pull/${{ github.event.issue.pull_request && github.event.issue.number || github.event.pull_request.number }}/merge
-      - name: Install SQLMesh + deps
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Install Dependencies
         run: pip install -r requirements.txt
         shell: bash
       - name: Run CI/CD Bot
@@ -40,3 +43,4 @@ jobs:
           DATABRICKS_HOSTNAME: ${{ secrets.DATABRICKS_HOSTNAME }}
           DATABRICKS_HTTPATH: ${{ secrets.DATABRICKS_HTTPATH }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+
