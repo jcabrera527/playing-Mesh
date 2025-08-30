@@ -54,7 +54,7 @@ jobs:
       # --- END OF NEW DEBUGGING STEP ---
 
       - name: Run CI/CD Bot
-        run: sqlmesh_cicd -p ${{ github.workspace }} github --token ${{ secrets.SQLMESH_TOKEN }} run-all
+        run: sqlmesh_cicd -p ${{ github.workspace }} github --token ${{ secrets.GITHUB_TOKEN  }} run-all
         env:
           # THIS IS THE FIX: Pass secrets as environment variables to the command
           DATABRICKS_HOSTNAME: ${{ secrets.DATABRICKS_HOSTNAME }}
