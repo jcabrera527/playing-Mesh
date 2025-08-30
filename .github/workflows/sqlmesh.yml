@@ -4,13 +4,16 @@ run-name: 🚀SQLMesh Bot 🚀
 on:
   pull_request:
     types:
-      - opened
-      - reopened
-      - synchronize
+    - synchronize
+    - opened
+    - closed
+  # Required if using required approvers to automate deployments
   pull_request_review:
     types:
-      - submitted
-      - dismissed
+    - edited
+    - submitted
+    - dismissed
+
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
@@ -39,10 +42,31 @@ jobs:
         run: pip install -r requirements.txt
         shell: bash
 
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        # Add if statement so we don't checkout merged PR but instead main branch
+        if: github.event.pull_request.merged == false
+        with:
+          ref: refs/pull/${{ github.event.issue.pull_request && github.event.issue.number || github.event.pull_request.number  }}/merge
+      - name: Checkout main branch
+        # Add if statement so we use main when merged
+        if: github.event.pull_request.merged == true
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+
       - name: Run CI/CD Bot
-        run: sqlmesh_cicd -p ${{ github.workspace }} github --token ${{ secrets.GITHUB_TOKEN }} run-all
+        if: github.event.pull_request.merged == false
+        run: |
+         sqlmesh_cicd -p ${{ github.workspace }} github --token ${{ secrets.GITHUB_TOKEN }} run-all
         env:
           # This provides the variables that your config.yaml is expecting
           DATABRICKS_HOSTNAME: ${{ secrets.DATABRICKS_HOSTNAME }}
           DATABRICKS_HTTPATH: ${{ secrets.DATABRICKS_HTTPATH }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+      - name: Deploy to Production
+        # `main` should be the name of your branch that represents production
+        if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+        run: |
+          sqlmesh_cicd -p ${{ github.workspace }} github --token ${{ secrets.GITHUB_TOKEN }} deploy-production
