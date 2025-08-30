@@ -45,3 +45,4 @@ jobs:
           # THIS IS THE FIX: Pass secrets as environment variables to the command
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+          DATABRICKS_HTTPATH: ${{ secrets.DATABRICKS_HTTPATH }}
