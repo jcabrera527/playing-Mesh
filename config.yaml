@@ -31,3 +31,9 @@ cicd_bot:
   # Other settings you might want:
   merge_method: squash
   prod_branch_name: main  # Or whatever your production branch is named
+
+users:
+- username: yessir
+  github_username: arebac
+  roles:
+    - required_approver
