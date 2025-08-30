@@ -43,6 +43,6 @@ jobs:
         run: sqlmesh_cicd -p ${{ github.workspace }} github --token ${{ secrets.GITHUB_TOKEN }} run-all
         env:
           # THIS IS THE FIX: Pass secrets as environment variables to the command
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOSTNAME }}
+          DATABRICKS_HOSTNAME: ${{ secrets.DATABRICKS_HOSTNAME }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
           DATABRICKS_HTTPATH: ${{ secrets.DATABRICKS_HTTPATH }}
