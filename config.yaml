@@ -23,14 +23,13 @@ linter:
     - invalidselectstarexpansion
 
 # --- CI/CD BOT CONFIGURATION ---
-# This section enables the CI/CD bot and specifies its type.
+# This section defines the bot's behavior.
 cicd_bot:
   type: github
-
-# --- GITHUB INTEGRATION SETTINGS ---
-# This section defines the specific behavior for the GitHub bot.
-github:
-  merge_method: squash
-  required_approvers:
-    - 'arebac'
-    - 'another_approver_username'
+  # Setting this to false (or omitting it) enables the "approve-to-deploy" workflow.
+  # This is the key setting from the video.
+  enable_deploy_command: false
+  # You can customize the merge method if you like.
+  merge_method: none
+  # Ensure this matches your production branch name in GitHub.
+  prod_branch_name: main
