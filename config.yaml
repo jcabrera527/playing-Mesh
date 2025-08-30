@@ -23,13 +23,11 @@ linter:
     - invalidselectstarexpansion
 
 # --- CI/CD BOT CONFIGURATION ---
-# This section defines the bot's behavior.
+# This is the correct location for these rules
 cicd_bot:
   type: github
-  # Setting this to false (or omitting it) enables the "approve-to-deploy" workflow.
-  # This is the key setting from the video.
+  # To enable "approve-to-deploy", this must be false or omitted (default is false)
   enable_deploy_command: false
-  # You can customize the merge method if you like.
-  merge_method: none
-  # Ensure this matches your production branch name in GitHub.
-  prod_branch_name: main
+  # Other settings you might want:
+  merge_method: squash
+  prod_branch_name: main  # Or whatever your production branch is named
