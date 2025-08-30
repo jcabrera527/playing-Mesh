@@ -4,13 +4,14 @@ run-name: 🚀SQLMesh Bot 🚀
 on:
   pull_request:
     types:
-      - opened
-      - reopened
-      - synchronize
-  # This trigger is CRITICAL for the "approve-to-deploy" workflow
+    - synchronize
+    - opened
+  # Required if using required approvers to automate deployments
   pull_request_review:
     types:
-      - submitted
+    - edited
+    - submitted
+    - dismissed
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
