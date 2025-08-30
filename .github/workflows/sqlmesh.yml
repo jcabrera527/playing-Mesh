@@ -47,6 +47,7 @@ jobs:
           if [ -z "$DATABRICKS_HTTPATH" ]; then echo "ERROR: DATABRICKS_HTTPATH is not set."; else echo "DATABRICKS_HTTPATH is set."; fi
           if [ -z "$DATABRICKS_TOKEN" ]; then echo "ERROR: DATABRICKS_TOKEN is not set."; else echo "DATABRICKS_TOKEN is set."; fi
         env:
+          DATABRICKS__CONNECTION__TYPE: "databricks"
           DATABRICKS_HOSTNAME: ${{ secrets.DATABRICKS_HOSTNAME }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
           DATABRICKS_HTTPATH: ${{ secrets.DATABRICKS_HTTPATH }}
