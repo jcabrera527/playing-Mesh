@@ -27,8 +27,6 @@ linter:
 cicd_bot:
   type: github
   merge_method: squash
-  users:
-  - username: arebac_the_approver
-    github_username: arebac  # The GitHub handle of your dummy/approver account
-    roles:
-      - required_approver
+  required_approvers:
+    - 'arebac'
+    - 'another_approver_username'
