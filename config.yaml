@@ -23,9 +23,13 @@ linter:
     - invalidselectstarexpansion
 
 # --- CI/CD BOT CONFIGURATION ---
-# This section defines the bot's behavior.
+# This section enables the CI/CD bot and specifies its type.
 cicd_bot:
   type: github
+
+# --- GITHUB INTEGRATION SETTINGS ---
+# This section defines the specific behavior for the GitHub bot.
+github:
   merge_method: squash
   required_approvers:
     - 'arebac'
