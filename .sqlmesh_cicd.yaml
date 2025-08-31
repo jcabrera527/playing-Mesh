@@ -1,6 +1,0 @@
-# This file defines WHO can approve a production deployment.
-users:
-  - username: arebac_the_approver
-    github_username: arebac  # The GitHub handle of your dummy/approver account
-    roles:
-      - required_approver
