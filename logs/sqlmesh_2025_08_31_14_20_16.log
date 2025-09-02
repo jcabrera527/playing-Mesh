@@ -1,7 +1,0 @@
-2025-08-31 14:20:17,155 - MainThread - databricks.sql.client - WARNING - [WARN] Parameter '_user_agent_entry' is deprecated; use 'user_agent_entry' instead. This parameter will be removed in the upcoming releases. (client.py:241)
-2025-08-31 14:20:17,756 - MainThread - databricks.sql.auth.retry - INFO - Received status code 200 for POST request (retry.py:355)
-2025-08-31 14:20:17,756 - MainThread - databricks.sql.auth.thrift_http_client - INFO - HTTP Response with status code 200, message: OK (thrift_http_client.py:201)
-2025-08-31 14:20:17,757 - MainThread - databricks.sql.client - INFO - Successfully opened session 01f08697-258f-141e-8001-27ee55d4a847 (client.py:285)
-2025-08-31 14:20:17,967 - MainThread - databricks.sql.auth.retry - INFO - Received status code 200 for POST request (retry.py:355)
-2025-08-31 14:20:17,968 - MainThread - databricks.sql.auth.thrift_http_client - INFO - HTTP Response with status code 200, message: OK (thrift_http_client.py:201)
-2025-08-31 14:20:18,287 - MainThread - root - INFO - Shutting down the event dispatcher (dispatcher.py:159)
