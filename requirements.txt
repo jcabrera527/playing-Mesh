@@ -1,5 +1,6 @@
-# requirements.txt
+# requirements.tx
 
 # Core dependency for the CI/CD pipeline
 sqlmesh[databricks,cicd,github,lsp]
+
 
