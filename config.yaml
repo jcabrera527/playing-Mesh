@@ -34,6 +34,6 @@ cicd_bot:
 
 users:
 - username: yessir
-  github_username: arebac
+  github_username: jroman94
   roles:
     - required_approver

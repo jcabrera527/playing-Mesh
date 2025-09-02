@@ -4,6 +4,10 @@ MODEL (
   kind INCREMENTAL_BY_TIME_RANGE (
     time_column export_date -- Use the date column for incremental loads
   ),
+
+  grain (export_date),
+
+
   owner 'Xtillion',
   description 'Summarizes total export quantity and value by day.',
   cron '@daily' -- Schedule this model to run once a day
@@ -18,5 +22,9 @@ FROM poc.stg_exports -- This creates the lineage link to the staging model
 WHERE
   -- SQLMesh automatically fills in the dates for each run
   export_date BETWEEN @start_date AND @end_date
+
+  -- Our logic change to only include sales with a value > 100
+  AND total_value > 100
+
 GROUP BY
   export_date;
